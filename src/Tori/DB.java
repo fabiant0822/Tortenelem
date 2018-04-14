@@ -75,4 +75,36 @@ public int hozzaad(String tema, String ev, String esemeny) {
             return 0;
         }
     }
+
+public int modosit(int evid, String tema, String ev, String esemeny) {
+        if (tema.isEmpty() || ev.isEmpty() || esemeny.isEmpty())
+            return 0;
+        int m = szam(ev);
+        if (m == 0)
+            return 0;
+        String s = "UPDATE evszamok SET tema=?, ev=?, esemeny=? "
+                + "WHERE evid=?;";
+        try (Connection kapcs = DriverManager.getConnection(dbUrl, user, pass);
+                PreparedStatement parancs = kapcs.prepareStatement(s)) {
+            parancs.setString(1, levag(tema.trim(), 10));
+            parancs.setInt(2, m);
+            parancs.setString(3, levag(esemeny.trim(), 80));
+            parancs.setInt(4, evid);
+            return parancs.executeUpdate();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+            return 0;
+        }
+    }
+
+public void torol(int evid) {
+        String s = "DELETE FROM evszamok WHERE evid=?;";
+        try (Connection kapcs = DriverManager.getConnection(dbUrl, user, pass);
+                PreparedStatement parancs = kapcs.prepareStatement(s)) {
+            parancs.setInt(1, evid);
+            parancs.executeUpdate();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        }                
+    }
 }

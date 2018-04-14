@@ -33,8 +33,35 @@ public class Ablak extends javax.swing.JFrame {
         txtEv.setText(tblEvek.getValueAt(i, 2).toString());
         txtEsemeny.setText(tblEvek.getValueAt(i, 3).toString());
     }
-            
-    @SuppressWarnings("unchecked")
+    
+    private void uj_kijelol() {
+        int sordb = tblEvek.getRowCount();
+        int max = 0;
+        int sor = 0;
+        for (int i = 0; i < sordb; i++) {
+            int n = Integer.parseInt(tblEvek.getValueAt(i, 0).toString());
+            if (n > max) {
+                max = n;
+                sor = i;
+            }
+        }
+        tblEvek.setRowSelectionInterval(sor, sor);
+        tablabol();
+    }
+    
+    private void kijelol(int evid) {
+        int sordb = tblEvek.getRowCount();
+        for (int i = 0; i < sordb; i++) {
+            int id = Integer.parseInt(tblEvek.getValueAt(i, 0).toString());
+            if (id == evid) {
+                    tblEvek.setRowSelectionInterval(i, i);
+                    tablabol();
+                    break;
+            }
+        }
+    }
+      
+ 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
@@ -130,6 +157,11 @@ public class Ablak extends javax.swing.JFrame {
             }
         });
         tblEvek.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblEvek.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tblEvekMouseReleased(evt);
+            }
+        });
         tblEvek.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 tblEvekKeyReleased(evt);
@@ -168,9 +200,19 @@ public class Ablak extends javax.swing.JFrame {
         btnModosit.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnModosit.setMnemonic('m');
         btnModosit.setText("Módosít");
+        btnModosit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModositActionPerformed(evt);
+            }
+        });
 
         btnTorol.setMnemonic('t');
         btnTorol.setText("Töröl");
+        btnTorol.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnTorolActionPerformed(evt);
+            }
+        });
 
         btnHozza.setMnemonic('h');
         btnHozza.setText("Hozzáad");
@@ -309,8 +351,36 @@ public class Ablak extends javax.swing.JFrame {
                             txtEsemeny.getText());
         if (n > 0) {
             ab.beolvas(tblEvek, lekerdez());
+            int ev = Integer.parseInt(txtEv.getText());
+            if (ev >= sldMettol.getValue() && ev <= sldMeddig.getValue())
+                uj_kijelol();
+            txtEv.requestFocus();
+            txtEv.selectAll();
         }
     }//GEN-LAST:event_btnHozzaActionPerformed
+
+    private void btnModositActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModositActionPerformed
+        int i = tblEvek.getSelectedRow();
+        if (i == -1) return;
+        int evid = Integer.parseInt(tblEvek.getValueAt(i, 0).toString());
+        int n = ab.modosit(evid, txtTema.getText(),
+                            txtEv.getText(), txtEsemeny.getText());
+        if (n > 0) {
+            ab.beolvas(tblEvek, lekerdez());
+            kijelol(evid);
+        }
+    }//GEN-LAST:event_btnModositActionPerformed
+
+    private void tblEvekMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEvekMouseReleased
+        tablabol();
+    }//GEN-LAST:event_tblEvekMouseReleased
+
+    private void btnTorolActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTorolActionPerformed
+        int i = tblEvek.getSelectedRow();
+        if (i == -1) return;
+        ab.torol(Integer.parseInt(tblEvek.getValueAt(i, 0).toString()));
+        ab.beolvas(tblEvek, lekerdez());
+    }//GEN-LAST:event_btnTorolActionPerformed
 
     /**
      * @param args the command line arguments
