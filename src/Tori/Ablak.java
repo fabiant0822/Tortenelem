@@ -1,16 +1,19 @@
 package Tori;
 
+import java.awt.event.KeyEvent;
+
 /**
  *
  * @author Fabian Tamas 1.0
  */
 public class Ablak extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Ablak
-     */
+    DB ab;
+    
     public Ablak() {
         initComponents();
+        ab = new DB();
+        ab.beolvas(tblEvek, lekerdez());
     }
 
     private String lekerdez() {
@@ -21,6 +24,14 @@ public class Ablak extends javax.swing.JFrame {
             q = q + " esemeny LIKE '%" + txtEsemenySzur.getText().trim() + "%' AND";
         q = q + " ev >= " + sldMettol.getValue() + " AND ev <= " + sldMeddig.getValue();
         return "SELECT * FROM evszamok WHERE " + q + " ORDER BY ev;";
+    }
+    
+    private void tablabol() {
+        int i = tblEvek.getSelectedRow();
+        if (i == -1) return;
+        txtTema.setText(tblEvek.getValueAt(i, 1).toString());
+        txtEv.setText(tblEvek.getValueAt(i, 2).toString());
+        txtEsemeny.setText(tblEvek.getValueAt(i, 3).toString());
     }
             
     @SuppressWarnings("unchecked")
@@ -48,6 +59,7 @@ public class Ablak extends javax.swing.JFrame {
         setTitle("Évszámok");
         setResizable(false);
 
+        sldMeddig.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         sldMeddig.setMajorTickSpacing(100);
         sldMeddig.setMaximum(2050);
         sldMeddig.setOrientation(javax.swing.JSlider.VERTICAL);
@@ -55,7 +67,18 @@ public class Ablak extends javax.swing.JFrame {
         sldMeddig.setPaintTicks(true);
         sldMeddig.setValue(2050);
         sldMeddig.setInverted(true);
+        sldMeddig.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                sldMeddigMouseReleased(evt);
+            }
+        });
+        sldMeddig.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                sldMeddigKeyReleased(evt);
+            }
+        });
 
+        sldMettol.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         sldMettol.setMajorTickSpacing(100);
         sldMettol.setMaximum(2050);
         sldMettol.setOrientation(javax.swing.JSlider.VERTICAL);
@@ -63,12 +86,33 @@ public class Ablak extends javax.swing.JFrame {
         sldMettol.setPaintTicks(true);
         sldMettol.setValue(0);
         sldMettol.setInverted(true);
+        sldMettol.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                sldMettolMouseReleased(evt);
+            }
+        });
+        sldMettol.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                sldMettolKeyReleased(evt);
+            }
+        });
 
         txtTemaSzur.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txtTemaSzur.setToolTipText("");
+        txtTemaSzur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTemaSzurActionPerformed(evt);
+            }
+        });
 
         txtEsemenySzur.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtEsemenySzur.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEsemenySzurActionPerformed(evt);
+            }
+        });
 
+        tblEvek.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tblEvek.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -85,8 +129,12 @@ public class Ablak extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblEvek.setEnabled(false);
         tblEvek.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblEvek.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblEvekKeyReleased(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblEvek);
         if (tblEvek.getColumnModel().getColumnCount() > 0) {
             tblEvek.getColumnModel().getColumn(0).setMinWidth(0);
@@ -143,7 +191,7 @@ public class Ablak extends javax.swing.JFrame {
                         .addComponent(txtTemaSzur, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(101, 101, 101)
                         .addComponent(txtEsemenySzur))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 704, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 696, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
@@ -205,6 +253,38 @@ public class Ablak extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtTemaSzurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTemaSzurActionPerformed
+        ab.beolvas(tblEvek, lekerdez());
+    }//GEN-LAST:event_txtTemaSzurActionPerformed
+
+    private void txtEsemenySzurActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEsemenySzurActionPerformed
+        ab.beolvas(tblEvek, lekerdez());
+    }//GEN-LAST:event_txtEsemenySzurActionPerformed
+
+    private void sldMettolMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sldMettolMouseReleased
+        ab.beolvas(tblEvek, lekerdez());
+    }//GEN-LAST:event_sldMettolMouseReleased
+
+    private void sldMeddigMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_sldMeddigMouseReleased
+        ab.beolvas(tblEvek, lekerdez());
+    }//GEN-LAST:event_sldMeddigMouseReleased
+
+    private void sldMettolKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sldMettolKeyReleased
+        ab.beolvas(tblEvek, lekerdez());
+    }//GEN-LAST:event_sldMettolKeyReleased
+
+    private void sldMeddigKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_sldMeddigKeyReleased
+        ab.beolvas(tblEvek, lekerdez());
+    }//GEN-LAST:event_sldMeddigKeyReleased
+
+    private void tblEvekKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblEvekKeyReleased
+        if (evt.getKeyCode() == KeyEvent.VK_UP
+            || evt.getKeyCode() == KeyEvent.VK_DOWN
+            || evt.getKeyCode() == KeyEvent.VK_PAGE_UP
+            || evt.getKeyCode() == KeyEvent.VK_PAGE_DOWN)
+        tablabol();
+    }//GEN-LAST:event_tblEvekKeyReleased
 
     /**
      * @param args the command line arguments
