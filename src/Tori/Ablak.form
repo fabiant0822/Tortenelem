@@ -306,12 +306,18 @@
         <Property name="mnemonic" type="int" value="104"/>
         <Property name="text" type="java.lang.String" value="Hozz&#xe1;ad"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnHozzaActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnUj">
       <Properties>
         <Property name="mnemonic" type="int" value="106"/>
         <Property name="text" type="java.lang.String" value="&#xda;j"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnUjActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

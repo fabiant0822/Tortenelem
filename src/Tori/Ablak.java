@@ -174,9 +174,19 @@ public class Ablak extends javax.swing.JFrame {
 
         btnHozza.setMnemonic('h');
         btnHozza.setText("Hozzáad");
+        btnHozza.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnHozzaActionPerformed(evt);
+            }
+        });
 
         btnUj.setMnemonic('j');
         btnUj.setText("Új");
+        btnUj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUjActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -285,6 +295,22 @@ public class Ablak extends javax.swing.JFrame {
             || evt.getKeyCode() == KeyEvent.VK_PAGE_DOWN)
         tablabol();
     }//GEN-LAST:event_tblEvekKeyReleased
+
+    private void btnUjActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUjActionPerformed
+        txtEv.setText("");
+        txtEsemeny.setText("");
+        txtTema.requestFocus();
+        txtTema.selectAll();
+    }//GEN-LAST:event_btnUjActionPerformed
+
+    private void btnHozzaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnHozzaActionPerformed
+        int n = ab.hozzaad(txtTema.getText(),
+                            txtEv.getText(),
+                            txtEsemeny.getText());
+        if (n > 0) {
+            ab.beolvas(tblEvek, lekerdez());
+        }
+    }//GEN-LAST:event_btnHozzaActionPerformed
 
     /**
      * @param args the command line arguments
